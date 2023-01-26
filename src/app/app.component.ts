@@ -91,4 +91,63 @@ export class AppComponent implements OnInit {
     //it remains in memmory
     this.runtimeCache ? this.cachedKeys$  = of(keys) : null;
   }
+
+  public addImagesToCache()
+  {
+    const imageName = 'picture.jfif';
+    fetch(imageName)
+      .then(
+      (response) => {
+          if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: ' +
+              response.status);
+          return;
+          }
+
+          // Examine the text in the response
+          response.blob().then(async imageBlob => {
+            // const data: BlobPart = "";
+            // const imageBlob = new Blob([data], { type: "image/jpeg" });
+            for(let i=1;i<1000;i++) {
+            const imageResponse = new Response(imageBlob);
+            this.runtimeCache?.put(`${imageName}${i}`, imageResponse);
+            }
+            this.runtimeCache ? this.cachedKeys$  = from(this.runtimeCache.keys()) : null;
+            this.messages.push('images added to cache');
+
+
+            // Then create a local URL for that image and print it
+            // const imageObjectURL = URL.createObjectURL(imageBlob);
+            // console.log(imageObjectURL);
+        })
+      }
+      )
+      .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+  }
+
+  public async startPerformanceTest()
+  {
+
+    if(this.runtimeCache) {
+      for (const request of await this.runtimeCache.keys()) {
+        // if (request.url.endsWith('.png')) {
+          let response = await this.runtimeCache.match(request);
+        // }
+        // const imageBlob = new Blob(response?.body, {type: 'image/jpeg'});
+        let blobres = await response?.blob();
+        if(blobres) {
+        const imageObjectURL = URL.createObjectURL(blobres);
+
+        const image = document.createElement('img')
+        image.src = imageObjectURL
+
+        const container = document.getElementById("container")
+        container?.append(image)
+        }
+      }
+    }
+  }
+
 }

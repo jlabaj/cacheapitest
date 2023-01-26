@@ -328,6 +328,12 @@
       <button (click)="deleteCache()" tabindex="0">
         <span>delete cache</span>
       </button>
+      <button (click)="addImagesToCache()" tabindex="0">
+        <span>add images to cache</span>
+      </button>
+      <button (click)="startPerformanceTest()" tabindex="0">
+        <span>start performance test</span>
+      </button>
     </tr>
 
     <div class="spacer"></div>
@@ -347,15 +353,26 @@
 </div>
 
 <div class="content" role="main">
-  keys:
-  <li *ngFor="let key of cachedKeys$ | async">
-    {{key.url}}
-  </li>
+
+  performance test images:
+
+  <div #container id="container"></div>
 
   messages:
   <li *ngFor="let message of messages">
     {{message}}
   </li>
+
+  keys:
+  <li *ngFor="let key of cachedKeys$ | async">
+    {{key.url}}
+  </li>
+
+
+
+
+
+
 
 </div>
 
