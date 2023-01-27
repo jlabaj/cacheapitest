@@ -22,6 +22,12 @@ export class AppComponent implements OnInit {
 
   public messages: string[] = [];
 
+  public startTime:number=0;
+
+  public endTime:number=0;
+
+  public executionTime='';
+
 
   async ngOnInit(): Promise<void> {
     // const data: BlobPart = "";
@@ -131,6 +137,8 @@ export class AppComponent implements OnInit {
   {
 
     if(this.runtimeCache) {
+      this.startTime = Date.now();
+      console.log('starttime:' + this.startTime);
       for (const request of await this.runtimeCache.keys()) {
         // if (request.url.endsWith('.png')) {
           let response = await this.runtimeCache.match(request);
@@ -147,6 +155,10 @@ export class AppComponent implements OnInit {
         container?.append(image)
         }
       }
+      this.endTime = Date.now();
+      console.log(this.endTime);
+      this.executionTime = `Execution time: ${this.endTime - this.startTime} ms`;
+      console.log(this.executionTime);
     }
   }
 
